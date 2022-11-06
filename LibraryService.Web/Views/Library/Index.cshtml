@@ -1,0 +1,41 @@
+﻿@model LibraryService.Web.Models.BookViewModel
+
+<form asp-controller="Library" asp-action="Index">
+    <p>
+        <select asp-for="SearchType" asp-items="Html.GetEnumSelectList<SearchType>()"></select>
+        <input type="text" name="SearchString"/>
+        <input type="submit" value="Search"/>
+    </p>
+</form>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(m => m.Books[0].Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Books[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(m => m.Books[0].Authors)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var model in Model.Books)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(m => model.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => model.Category)
+                </td>
+                <td>
+                    @Html.DisplayFor(m => model.Authors)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
