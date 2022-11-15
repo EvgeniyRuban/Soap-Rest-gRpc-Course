@@ -9,6 +9,6 @@ namespace PumpService
         void RunScript();
 
         [OperationContract]
-        void UpdateAndCpileScript(string fileName);
+        void UpdateAndCompileScript(string fileName);
     }
 }

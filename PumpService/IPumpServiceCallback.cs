@@ -6,6 +6,6 @@ namespace PumpService
     public interface IPumpServiceCallback
     {
         [OperationContract]
-        void UpdateStatistics(IStatisticsService statistics);
+        void UpdateStatistics(StatisticsService statistics);
     }
 }

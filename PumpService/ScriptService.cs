@@ -1,6 +1,7 @@
 ﻿using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
+using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -71,7 +72,7 @@ namespace PumpService
                         : _statisticsService.ErrorTacts++;
 
                     _statisticsService.AllTacts++;
-                    _pumpServiceCallback.UpdateStatistics(_statisticsService);
+                    _pumpServiceCallback.UpdateStatistics((StatisticsService)_statisticsService);
                 }
             });
         }
