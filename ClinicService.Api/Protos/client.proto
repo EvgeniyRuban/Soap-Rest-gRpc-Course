@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option csharp_namespace = "ClinicServiceNamespace";
+
+// https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
+
+import "google/protobuf/wrappers.proto";
+
+service ClientService{
+	rpc Add (CreateClientRequest) returns (CreateClientResponse);
+	rpc Get (GetClientRequest) returns (GetClientResponse);
+	rpc GetAll (GetClientsRequest) returns (GetClientsResponse);
+	rpc Update (UpdateClientRequest) returns (UpdateClientResponse);
+	rpc Delete (DeleteClientRequest) returns (DeleteClientResponse);
+}
+
+message ClientResponse{
+	int32 id = 1;
+	string firstName = 2;
+	string surname = 3;
+	string patronymic = 4;
+	string document = 5;
+}
+
+message CreateClientRequest{
+	string firstName = 1;
+	string surname = 2;
+	string patronymic = 3;
+	string document = 4;
+}
+
+message CreateClientResponse{
+	google.protobuf.Int32Value id = 1;
+	int32 errCode = 2;
+	string errMessage = 3;
+}
+
+message GetClientRequest{
+	int32 id = 1;
+}
+
+message GetClientResponse{
+	ClientResponse client = 1;
+	int32 errCode = 2;
+	string errMessage = 3;
+}
+
+message GetClientsRequest{
+}
+
+message GetClientsResponse{
+	repeated ClientResponse clients = 1;
+	int32 errCode = 2;
+	string errMessage = 3;
+}
+
+message UpdateClientRequest{
+	int32 id = 1;
+	string firstName = 2;
+	string surname = 3;
+	string patronymic = 4;
+	string document = 5;
+}
+
+message UpdateClientResponse{
+	int32 errCode = 2;
+	string errMessage = 3;
+}
+
+message DeleteClientRequest{
+	int32 id = 1;
+}
+
+message DeleteClientResponse{
+	int32 errCode = 2;
+	string errMessage = 3;
+}

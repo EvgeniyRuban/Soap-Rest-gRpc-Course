@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicService.Api", "ClinicService.Api\ClinicService.Api.csproj", "{494D78A5-CADE-4F36-A619-EC315501B207}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.Api", "ClinicService.Api\ClinicService.Api.csproj", "{494D78A5-CADE-4F36-A619-EC315501B207}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicService.Data", "ClinicService.Data\ClinicService.Data.csproj", "{1C471419-B82C-4CFF-B968-8DD326F35B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.Data", "ClinicService.Data\ClinicService.Data.csproj", "{1C471419-B82C-4CFF-B968-8DD326F35B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
