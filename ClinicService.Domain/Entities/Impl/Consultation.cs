@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClinicService.Data.Entities;
+namespace ClinicService.Domain.Entities;
 
 [Table("Consultations")]
-public class Consultation
+public class Consultation : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }

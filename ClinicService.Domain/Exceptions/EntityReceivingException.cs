@@ -1,4 +1,4 @@
-﻿namespace ClinicService.Api.Exceptions;
+﻿namespace ClinicService.Domain.Exceptions;
 
 public sealed class EntityReceivingException : ExceptionBase
 {

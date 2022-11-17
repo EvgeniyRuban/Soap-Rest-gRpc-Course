@@ -15,4 +15,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ClinicService.Domain\ClinicService.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

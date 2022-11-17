@@ -5,9 +5,11 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.Api", "ClinicService.Api\ClinicService.Api.csproj", "{494D78A5-CADE-4F36-A619-EC315501B207}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.Data", "ClinicService.Data\ClinicService.Data.csproj", "{1C471419-B82C-4CFF-B968-8DD326F35B6F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.DAL", "ClinicService.DAL\ClinicService.DAL.csproj", "{1C471419-B82C-4CFF-B968-8DD326F35B6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicClient", "ClinicClient\ClinicClient.csproj", "{6BA926AB-0479-4024-95D2-763EED714FF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicClient", "ClinicClient\ClinicClient.csproj", "{6BA926AB-0479-4024-95D2-763EED714FF1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicService.Domain", "ClinicService.Domain\ClinicService.Domain.csproj", "{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{6BA926AB-0479-4024-95D2-763EED714FF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BA926AB-0479-4024-95D2-763EED714FF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BA926AB-0479-4024-95D2-763EED714FF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

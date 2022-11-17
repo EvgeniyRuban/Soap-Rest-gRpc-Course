@@ -1,5 +1,7 @@
 using ClinicService.Api.Services;
-using ClinicService.Data;
+using ClinicService.DAL;
+using ClinicService.DAL.Repos;
+using ClinicService.Domain.Repos;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
@@ -29,6 +31,8 @@ namespace ClinicService.Api
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+
+            builder.Services.AddScoped<IClientRepository, ClientRepository>();
 
             var app = builder.Build();
 

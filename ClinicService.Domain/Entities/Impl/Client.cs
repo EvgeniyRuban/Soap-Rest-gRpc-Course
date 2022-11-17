@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace ClinicService.Data.Entities;
+namespace ClinicService.Domain.Entities;
 
 [Table("Clients")]
-public class Client
+public class Client : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
@@ -26,5 +26,5 @@ public class Client
     public ICollection<Pet> Pets { get; set; } = new HashSet<Pet>();
 
     [InverseProperty(nameof(Consultation.Client))]
-    public ICollection<Consultation> Consultations{ get; set; } = new HashSet<Consultation>();
+    public ICollection<Consultation> Consultations { get; set; } = new HashSet<Consultation>();
 }

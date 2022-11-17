@@ -1,6 +1,6 @@
-﻿using ClinicService.Api.Exceptions;
-using ClinicService.Data;
-using ClinicService.Data.Entities;
+﻿using ClinicService.DAL;
+using ClinicService.Domain.Entities;
+using ClinicService.Domain.Exceptions;
 using ClinicServiceNamespace;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;

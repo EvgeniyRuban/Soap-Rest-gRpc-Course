@@ -1,4 +1,4 @@
-﻿namespace ClinicService.Api.Exceptions;
+﻿namespace ClinicService.Domain.Exceptions;
 
 public abstract class ExceptionBase : Exception
 {
@@ -9,7 +9,7 @@ public abstract class ExceptionBase : Exception
     {
     }
 
-    public virtual int ErrorCode { get; private set; } = (int)Exceptions.ErrorCode.ServerSideError;
+    public int ErrorCode { get; private set; } = (int)Exceptions.ErrorCode.ServerSideError;
 
     protected void SetErrorCode(ErrorCode errorCode) => ErrorCode = (int)errorCode;
 }
