@@ -1,5 +1,8 @@
+using ClinicService.Api.Services;
 using ClinicService.Data;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace ClinicService.Api
 {
@@ -8,6 +11,16 @@ namespace ClinicService.Api
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddGrpc();
+
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Listen(IPAddress.Any, 5001, listenOptions =>
+                {
+                    listenOptions.Protocols = HttpProtocols.Http2;
+                });
+            });
 
             builder.Services.AddDbContext<ClinicServiceDbContext>(options =>
             {
@@ -19,11 +32,14 @@ namespace ClinicService.Api
 
             var app = builder.Build();
 
-            if (app.Environment.IsDevelopment())
-            {
-            }
-
             app.MapControllers();
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapGrpcService<ClientService>();
+            });
 
             app.Run();
         }
