@@ -160,7 +160,7 @@ public class ClientService : ClientServiceBase
             await _dbContext.SaveChangesAsync();
             return new();
         }
-        catch(EntityNotFoundException ex)
+        catch (EntityNotFoundException ex)
         {
             return new()
             {
@@ -168,12 +168,12 @@ public class ClientService : ClientServiceBase
                 ErrMessage = ex.Message
             };
         }
-        catch(Exception)
+        catch (Exception)
         {
             var exceptionTemplate = new EntityDeletionException();
             return new()
             {
-                ErrCode = exceptionTemplate.ErrorCode, 
+                ErrCode = exceptionTemplate.ErrorCode,
                 ErrMessage = exceptionTemplate.Message
             };
         }

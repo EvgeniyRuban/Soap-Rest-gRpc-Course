@@ -4,6 +4,6 @@ public sealed class EntityNotFoundException : ExceptionBase
 {
     public EntityNotFoundException(Exception? innerException = null) : base("Entity not found.", innerException)
     {
-        SetErrorCode(Exceptions.ErrorCode.EntityNotFound);
+        SetErrorCode(Exceptions.ErrorCode.EntityNotFoundError);
     }
 }
