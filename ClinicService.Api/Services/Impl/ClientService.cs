@@ -42,12 +42,13 @@ public class ClientService : ClientServiceBase
                 Id = entity.Entity.Id
             };
         }
-        catch
+        catch(Exception)
         {
+            var exceptionTemplate = new EntityAdditionException();
             return new()
             {
-                ErrCode = 1,
-                ErrMessage = "Client addition error."
+                ErrCode = exceptionTemplate.ErrorCode,
+                ErrMessage = exceptionTemplate.Message
             };
         }
     }
@@ -67,17 +68,78 @@ public class ClientService : ClientServiceBase
                 Client = new()
                 {
                     Id = client.Id,
-
+                    FirstName = client.FirstName,
+                    Surname = client.Surname,
+                    Patronymic= client.Patronymic,
+                    Document = client.Document,
                 }
             };
         }
-        catch()
+        catch(EntityNotFoundException ex)
         {
             return new()
             {
-                ErrCode = 1,
-                ErrMessage = "Client getting error."
+                ErrCode = ex.ErrorCode,
+                ErrMessage = ex.Message
             };
         }
+        catch(Exception)
+        {
+            var exceptionTemplate = new EntityReceivingException();
+            return new()
+            {
+                ErrCode = exceptionTemplate.ErrorCode,
+                ErrMessage = exceptionTemplate.Message
+            };
+        }
+    }
+    public async override Task<GetClientsResponse> GetAll(GetClientsRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var response = new GetClientsResponse();
+            var clients = await _dbContext.Clients.Select(c => new ClientResponse
+            {
+                Id = c.Id,
+                FirstName = c.FirstName,
+                Surname = c.Surname,
+                Patronymic = c.Patronymic,
+                Document = c.Document,
+            }).ToListAsync();
+            response.Clients.AddRange(clients);
+
+            return response;
+        }
+        catch (Exception)
+        {
+            var exceptionTemplate = new ServerSideException();
+            return new()
+            {
+                ErrCode = exceptionTemplate.ErrorCode,
+                ErrMessage = exceptionTemplate.Message
+            };
+        }
+    }
+    public async override Task<UpdateClientResponse> Update(UpdateClientRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var client = _dbContext.Clients.FirstOrDefault(c => c.Id == request.Id);
+
+            if (client is null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+        }
+        catch(EntityNotFoundException ex)
+        {
+            return new()
+            {
+                ErrCode = ex.ErrorCode,
+                ErrMessage = ex.Message
+            };
+        }
+        
     }
 }
