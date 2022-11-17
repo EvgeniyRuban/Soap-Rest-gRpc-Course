@@ -3,10 +3,7 @@ using ClinicService.Data;
 using ClinicService.Data.Entities;
 using ClinicServiceNamespace;
 using Grpc.Core;
-using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Runtime.CompilerServices;
 using static ClinicServiceNamespace.ClientService;
 
 namespace ClinicService.Api.Services;
@@ -37,12 +34,12 @@ public class ClientService : ClientServiceBase
             var entity = await _dbContext.Clients.AddAsync(client);
             await _dbContext.SaveChangesAsync();
 
-            return new ()
+            return new()
             {
                 Id = entity.Entity.Id
             };
         }
-        catch(Exception)
+        catch (Exception)
         {
             var exceptionTemplate = new EntityAdditionException();
             return new()
@@ -58,7 +55,7 @@ public class ClientService : ClientServiceBase
         {
             var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == request.Id);
 
-            if(client is null)
+            if (client is null)
             {
                 throw new EntityNotFoundException();
             }
@@ -70,12 +67,12 @@ public class ClientService : ClientServiceBase
                     Id = client.Id,
                     FirstName = client.FirstName,
                     Surname = client.Surname,
-                    Patronymic= client.Patronymic,
+                    Patronymic = client.Patronymic,
                     Document = client.Document,
                 }
             };
         }
-        catch(EntityNotFoundException ex)
+        catch (EntityNotFoundException ex)
         {
             return new()
             {
@@ -83,7 +80,7 @@ public class ClientService : ClientServiceBase
                 ErrMessage = ex.Message
             };
         }
-        catch(Exception)
+        catch (Exception)
         {
             var exceptionTemplate = new EntityReceivingException();
             return new()
@@ -131,6 +128,37 @@ public class ClientService : ClientServiceBase
                 throw new EntityNotFoundException();
             }
 
+            client.FirstName = request.FirstName;
+            client.Surname = request.Surname;
+            client.Patronymic = request.Patronymic;
+            client.Document = request.Document;
+
+            await _dbContext.SaveChangesAsync();
+
+            return new();
+        }
+        catch (EntityNotFoundException ex)
+        {
+            return new()
+            {
+                ErrCode = ex.ErrorCode,
+                ErrMessage = ex.Message
+            };
+        }
+    }
+    public async override Task<DeleteClientResponse> Delete(DeleteClientRequest request, ServerCallContext context)
+    {
+        try
+        {
+            var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == request.Id);
+            if (client is null)
+            {
+                throw new EntityNotFoundException();
+            }
+
+            _dbContext.Clients.Remove(client);
+            await _dbContext.SaveChangesAsync();
+            return new();
         }
         catch(EntityNotFoundException ex)
         {
@@ -140,6 +168,14 @@ public class ClientService : ClientServiceBase
                 ErrMessage = ex.Message
             };
         }
-        
+        catch(Exception)
+        {
+            var exceptionTemplate = new EntityDeletionException();
+            return new()
+            {
+                ErrCode = exceptionTemplate.ErrorCode, 
+                ErrMessage = exceptionTemplate.Message
+            };
+        }
     }
 }

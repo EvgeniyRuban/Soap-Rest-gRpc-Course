@@ -63,8 +63,8 @@ message UpdateClientRequest{
 }
 
 message UpdateClientResponse{
-	int32 errCode = 2;
-	string errMessage = 3;
+	int32 errCode = 1;
+	string errMessage = 2;
 }
 
 message DeleteClientRequest{
@@ -72,6 +72,6 @@ message DeleteClientRequest{
 }
 
 message DeleteClientResponse{
-	int32 errCode = 2;
-	string errMessage = 3;
+	int32 errCode = 1;
+	string errMessage = 2;
 }
