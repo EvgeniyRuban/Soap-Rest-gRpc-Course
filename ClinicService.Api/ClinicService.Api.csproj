@@ -22,6 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ClinicService.BusinessLogic\ClinicService.BusinessLogic.csproj" />
     <ProjectReference Include="..\ClinicService.DAL\ClinicService.DAL.csproj" />
     <ProjectReference Include="..\ClinicService.Domain\ClinicService.Domain.csproj" />
   </ItemGroup>

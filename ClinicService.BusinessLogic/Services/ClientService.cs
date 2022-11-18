@@ -5,7 +5,7 @@ using ClinicServiceNamespace;
 using Grpc.Core;
 using static ClinicServiceNamespace.ClientService;
 
-namespace ClinicService.Api.Services;
+namespace ClinicService.BusinessLogic.Services;
 
 public class ClientService : ClientServiceBase
 {

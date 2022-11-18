@@ -16,6 +16,7 @@ public class ClientRepository : IClientRepository
         _dbContext = dbContext;
     }
 
+
     public async Task<int> Add(Client entity, CancellationToken stoppingToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));

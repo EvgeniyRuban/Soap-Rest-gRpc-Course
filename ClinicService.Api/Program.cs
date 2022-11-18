@@ -1,4 +1,4 @@
-using ClinicService.Api.Services;
+using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
 using ClinicService.Domain.Repos;
