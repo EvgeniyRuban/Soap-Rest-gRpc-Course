@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\client.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.49.0" />
     <PackageReference Include="Grpc.Tools" Version="2.50.0">
       <PrivateAssets>all</PrivateAssets>
@@ -22,9 +26,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClinicService.BusinessLogic\ClinicService.BusinessLogic.csproj" />
     <ProjectReference Include="..\ClinicService.DAL\ClinicService.DAL.csproj" />
     <ProjectReference Include="..\ClinicService.Domain\ClinicService.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="Protos\client.proto" GrpcServices="Server" />
   </ItemGroup>
 
 </Project>
