@@ -14,23 +14,33 @@ service ClientService{
 	// Add client
 	rpc Add (CreateClientRequest) returns (CreateClientResponse){
 		option (google.api.http) = {
-			post: "/"
+			post: "/clients"
 		};
 	}
 	// Get client by id
 	rpc Get (GetClientRequest) returns (GetClientResponse){
 		option (google.api.http) = {
-			get: "/{id}"
+			get: "/clients/{id}"
 		};
 	}
 	// Get clients
 	rpc GetAll (GetClientsRequest) returns (GetClientsResponse){
 		option (google.api.http) = {
-			get: "/"
+			get: "/clients"
 		};
 	}
-	rpc Update (UpdateClientRequest) returns (UpdateClientResponse);
-	rpc Delete (DeleteClientRequest) returns (DeleteClientResponse);
+	// Update client
+	rpc Update (UpdateClientRequest) returns (UpdateClientResponse){
+		option (google.api.http) = {
+			put: "/clients"
+		};
+	}
+	// Delete client by id
+	rpc Delete (DeleteClientRequest) returns (DeleteClientResponse){
+		option (google.api.http) = {
+			delete: "/clients/{id}"
+		};
+	}
 }
 
 message ClientResponse{
