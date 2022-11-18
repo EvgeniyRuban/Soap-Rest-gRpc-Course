@@ -16,7 +16,6 @@ public class ClientRepository : IClientRepository
         _dbContext = dbContext;
     }
 
-
     public async Task<int> Add(Client entity, CancellationToken stoppingToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));
@@ -24,7 +23,6 @@ public class ClientRepository : IClientRepository
         await _dbContext.SaveChangesAsync(stoppingToken);
         return newEntity.Entity.Id;
     }
-
     public async Task Delete(int id, CancellationToken stoppingToken = default)
     {
         var entityToDelete = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == id, stoppingToken);
@@ -35,13 +33,10 @@ public class ClientRepository : IClientRepository
         _dbContext.Clients.Remove(entityToDelete);
         await _dbContext.SaveChangesAsync(stoppingToken);
     }
-
     public async Task<Client?> Get(int id, CancellationToken stoppingToken = default)
         => await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == id, stoppingToken);
-
-    public async Task<IReadOnlyList<Client>> GetAll(CancellationToken stoppingToken)
+    public async Task<IReadOnlyCollection<Client>> GetAll(CancellationToken stoppingToken)
         => await _dbContext.Clients.ToListAsync();
-
     public async Task Update(Client entity, CancellationToken stoppingToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));

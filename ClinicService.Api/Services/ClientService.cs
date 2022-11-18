@@ -1,21 +1,20 @@
-﻿using ClinicService.DAL;
-using ClinicService.Domain.Entities;
+﻿using ClinicService.Domain.Entities;
 using ClinicService.Domain.Exceptions;
+using ClinicService.Domain.Repos;
 using ClinicServiceNamespace;
 using Grpc.Core;
-using Microsoft.EntityFrameworkCore;
 using static ClinicServiceNamespace.ClientService;
 
 namespace ClinicService.Api.Services;
 
 public class ClientService : ClientServiceBase
 {
-    private readonly ClinicServiceDbContext _dbContext;
+    private readonly IClientRepository _clientRepository;
 
 
-    public ClientService(ClinicServiceDbContext dbContext)
+    public ClientService(IClientRepository clientRepository)
     {
-        _dbContext = dbContext;
+        _clientRepository = clientRepository;
     }
 
 
@@ -31,13 +30,14 @@ public class ClientService : ClientServiceBase
                 Document = request.Document,
             };
 
-            var entity = await _dbContext.Clients.AddAsync(client);
-            await _dbContext.SaveChangesAsync();
-
             return new()
             {
-                Id = entity.Entity.Id
+                Id = await _clientRepository.Add(client, context.CancellationToken)
             };
+        }
+        catch (OperationCanceledException)
+        {
+            return new();
         }
         catch (Exception)
         {
@@ -53,8 +53,7 @@ public class ClientService : ClientServiceBase
     {
         try
         {
-            var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == request.Id);
-
+            var client = await _clientRepository.Get(request.Id, context.CancellationToken);
             if (client is null)
             {
                 throw new EntityNotFoundException();
@@ -71,6 +70,10 @@ public class ClientService : ClientServiceBase
                     Document = client.Document,
                 }
             };
+        }
+        catch (OperationCanceledException)
+        {
+            return new();
         }
         catch (EntityNotFoundException ex)
         {
@@ -95,21 +98,26 @@ public class ClientService : ClientServiceBase
         try
         {
             var response = new GetClientsResponse();
-            var clients = await _dbContext.Clients.Select(c => new ClientResponse
-            {
-                Id = c.Id,
-                FirstName = c.FirstName,
-                Surname = c.Surname,
-                Patronymic = c.Patronymic,
-                Document = c.Document,
-            }).ToListAsync();
-            response.Clients.AddRange(clients);
+            var clients = await _clientRepository.GetAll(context.CancellationToken);
+            response.Clients.AddRange(
+                clients.Select(c => new ClientResponse
+                {
+                    Id = c.Id,
+                    FirstName = c.FirstName,
+                    Surname = c.Surname,
+                    Patronymic = c.Patronymic,
+                    Document = c.Document,
+                }));
 
             return response;
         }
+        catch (OperationCanceledException)
+        {
+            return new();
+        }
         catch (Exception)
         {
-            var exceptionTemplate = new ServerSideException();
+            var exceptionTemplate = new EntityReceivingException();
             return new()
             {
                 ErrCode = exceptionTemplate.ErrorCode,
@@ -121,20 +129,19 @@ public class ClientService : ClientServiceBase
     {
         try
         {
-            var client = _dbContext.Clients.FirstOrDefault(c => c.Id == request.Id);
-
-            if (client is null)
+            var client = new Client
             {
-                throw new EntityNotFoundException();
-            }
-
-            client.FirstName = request.FirstName;
-            client.Surname = request.Surname;
-            client.Patronymic = request.Patronymic;
-            client.Document = request.Document;
-
-            await _dbContext.SaveChangesAsync();
-
+                Id = request.Id,
+                FirstName = request.FirstName,
+                Surname = request.Surname,
+                Patronymic = request.Patronymic,
+                Document = request.Document,
+            };
+            await _clientRepository.Update(client, context.CancellationToken);
+            return new();
+        }
+        catch (OperationCanceledException)
+        {
             return new();
         }
         catch (EntityNotFoundException ex)
@@ -145,19 +152,25 @@ public class ClientService : ClientServiceBase
                 ErrMessage = ex.Message
             };
         }
+        catch (Exception)
+        {
+            var exceptionTemplate = new EntityUpdatingException();
+            return new()
+            {
+                ErrCode = exceptionTemplate.ErrorCode,
+                ErrMessage = exceptionTemplate.Message
+            };
+        }
     }
     public async override Task<DeleteClientResponse> Delete(DeleteClientRequest request, ServerCallContext context)
     {
         try
         {
-            var client = await _dbContext.Clients.FirstOrDefaultAsync(c => c.Id == request.Id);
-            if (client is null)
-            {
-                throw new EntityNotFoundException();
-            }
-
-            _dbContext.Clients.Remove(client);
-            await _dbContext.SaveChangesAsync();
+            await _clientRepository.Delete(request.Id, context.CancellationToken);
+            return new();
+        }
+        catch (OperationCanceledException)
+        {
             return new();
         }
         catch (EntityNotFoundException ex)
