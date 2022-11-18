@@ -11,7 +11,7 @@ internal class Program
         AppContext.SetSwitch(
                 "System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
 
-        using var channel = GrpcChannel.ForAddress("http://localhost:5001");
+        using var channel = GrpcChannel.ForAddress("http://localhost:5101");
         ClientServiceClient clinicServiceClient = new ClientServiceClient(channel);
 
         var createClientResponse = clinicServiceClient.Add(new CreateClientRequest
