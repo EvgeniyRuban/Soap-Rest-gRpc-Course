@@ -2,6 +2,6 @@
 
 namespace ClinicService.Domain.Repos;
 
-public interface IRepository<TEntity, TId> where TEntity : IEntity
+public interface IRepository<TEntity, TId> where TEntity : IEntity<TId>
 {
 }

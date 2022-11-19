@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ClinicService.Domain.Entities;
 
 [Table("Pets")]
-public class Pet : IEntity
+public class Pet : IEntity<int>
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }

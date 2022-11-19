@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace ClinicService.Domain.Entities;
 
 [Table("AccountSessions")]
-public class AccountSession : IEntity
+public class AccountSession : IEntity<int>
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int SessionId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(384)]

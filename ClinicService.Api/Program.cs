@@ -1,6 +1,8 @@
+using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
 using ClinicService.Domain.Repos;
+using ClinicService.Domain.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -52,6 +54,7 @@ public class Program
         #region Registering service dependencies
 
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<ClientServiceBase, ClientService>();
 
         #endregion
 

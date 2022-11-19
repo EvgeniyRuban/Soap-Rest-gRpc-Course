@@ -3,7 +3,7 @@ using ClinicService.Domain.Exceptions;
 
 namespace ClinicService.Domain.Repos;
 
-public interface ICrudRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : IEntity
+public interface ICrudRepository<TEntity, TId> : IRepository<TEntity, TId> where TEntity : IEntity<TId>
 {
     /// <summary>
     /// Get <typeparamref name="TEntity"/> entity by <paramref name="id"/>.

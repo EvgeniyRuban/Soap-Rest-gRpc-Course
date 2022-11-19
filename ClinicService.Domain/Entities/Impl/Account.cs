@@ -4,10 +4,10 @@ using System.ComponentModel.DataAnnotations;
 namespace ClinicService.Domain.Entities;
 
 [Table("Accounts")]
-public class Account : IEntity
+public class Account : IEntity<int>
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int AccountId { get; set; }
+    public int Id { get; set; }
 
     [StringLength(255)]
     public string EMail { get; set; }

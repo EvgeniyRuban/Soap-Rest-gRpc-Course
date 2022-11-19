@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace ClinicService.Domain.Entities;
 
 [Table("Clients")]
-public class Client : IEntity
+public class Client : IEntity<int>
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public int Id { get; set; }
