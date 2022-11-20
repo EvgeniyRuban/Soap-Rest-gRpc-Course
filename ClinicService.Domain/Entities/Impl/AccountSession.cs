@@ -7,7 +7,7 @@ namespace ClinicService.Domain.Entities;
 public class AccountSession : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int SessionId { get; set; }
+    public int Id { get; set; }
 
     [Required]
     [StringLength(384)]

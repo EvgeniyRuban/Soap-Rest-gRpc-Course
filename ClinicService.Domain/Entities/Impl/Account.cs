@@ -7,10 +7,10 @@ namespace ClinicService.Domain.Entities;
 public class Account : IEntity
 {
     [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int AccountId { get; set; }
+    public int Id { get; set; }
 
     [StringLength(255)]
-    public string EMail { get; set; }
+    public string Email { get; set; }
 
     [StringLength(100)]
     public string PasswordSalt { get; set; }
@@ -24,10 +24,11 @@ public class Account : IEntity
     public string FirstName { get; set; }
 
     [StringLength(255)]
-    public string LastName { get; set; }
+    public string Surname { get; set; }
 
     [StringLength(255)]
-    public string SecondName { get; set; }
+    public string Patronymic { get; set; }
+
 
     [InverseProperty(nameof(AccountSession.Account))]
     public virtual ICollection<AccountSession> Sessions { get; set; } = new HashSet<AccountSession>();
