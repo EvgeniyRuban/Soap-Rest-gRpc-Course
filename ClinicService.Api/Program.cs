@@ -1,7 +1,10 @@
+using AutoMapper;
 using ClinicService.Api.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
+using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
+using Google.Api;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -14,6 +17,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        #region Configure AutoMapper
+
+        var mapperConfigurations = new MapperConfiguration(mp => mp.AddProfile<MappingProfile>());
+        var mapper = mapperConfigurations.CreateMapper();
+        builder.Services.AddSingleton(mapper);
+
+        #endregion
 
         #region Configure Grpc
 
