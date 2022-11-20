@@ -1,16 +1,12 @@
 using AutoMapper;
-using ClinicService.Api.Services;
 using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
 using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
-using ClinicService.Domain.Repos.Interfaces;
 using ClinicService.Domain.Services;
-using Google.Api;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using System.Net;
 
 namespace ClinicService.Api;
@@ -78,6 +74,7 @@ public class Program
         builder.Services.AddScoped<IClientService, ClientService>();
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
         builder.Services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
+        builder.Services.AddSingleton<Domain.Services.IAuthenticationService, BusinessLogic.Services.AuthenticationService>();
 
         #endregion
 

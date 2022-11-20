@@ -1,6 +1,6 @@
 ﻿using ClinicService.Domain.Entities;
 using ClinicService.Domain.Exceptions;
-using ClinicService.Domain.Repos.Interfaces;
+using ClinicService.Domain.Repos;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicService.DAL.Repos;
@@ -36,6 +36,14 @@ public class AccountRepository : IAccountRepository
     }
     public async Task<Account?> Get(int id, CancellationToken stoppingToken = default) 
         => await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == id, stoppingToken);
+    public async Task<Account?> Get(string login, CancellationToken stoppingToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(login))
+        {
+            throw new ArgumentException(login, nameof(login));
+        }
+        return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == login);
+    }
     public async Task<IReadOnlyCollection<Account>> GetAll(CancellationToken stoppingToken = default) 
         => await _dbContext.Accounts.ToListAsync(stoppingToken);
     public async Task Update(Account entity, CancellationToken stoppingToken = default)
