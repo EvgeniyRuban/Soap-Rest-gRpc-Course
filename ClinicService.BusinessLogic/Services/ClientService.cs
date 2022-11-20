@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.Internal;
+using ClinicService.Domain.Entities;
+using ClinicService.Domain.Exceptions;
 using ClinicService.Domain.Models;
 using ClinicService.Domain.Repos;
 using ClinicService.Domain.Services;
@@ -20,28 +23,54 @@ public sealed class ClientService : IClientService
     }
 
 
-    public Task<int> Add(CreateClientRequest request, CancellationToken stoppingToken = default)
+    public async Task<int> Add(CreateClientRequest request, CancellationToken stoppingToken = default)
     {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        var entity = _mapper.Map<CreateClientRequest, Client>(request);
+        if (entity is null)
+        {
+            throw new AutoMapperMappingException("Mapping exception.", null, new TypePair(typeof(CreateClientRequest), typeof(Client)));
+        }
+        return await _clientRepository.Add(entity, stoppingToken);
     }
-
-    public Task Delete(int id, CancellationToken stoppingToken = default)
+    public async Task Delete(int id, CancellationToken stoppingToken = default)
+        => await _clientRepository.Delete(id, stoppingToken);
+    public async Task<ClientDto> Get(int id, CancellationToken stoppingToken = default)
     {
-        throw new NotImplementedException();
+        var entity = await _clientRepository.Get(id, stoppingToken);
+        if (entity is null)
+        {
+            throw new EntityNotFoundException();
+        }
+        var result = _mapper.Map<Client, ClientDto>(entity);
+        if (entity is null)
+        {
+            throw new AutoMapperMappingException("Mapping exception.", null, new TypePair(typeof(Client), typeof(ClientDto)));
+        }
+        return result;
     }
-
-    public Task<ClientDto> Get(int id, CancellationToken stoppingToken = default)
+    public async Task<IReadOnlyCollection<ClientDto>> GetAll(CancellationToken stoppingToken = default)
     {
-        throw new NotImplementedException();
+        var entites = await _clientRepository.GetAll(stoppingToken);
+        var result = new List<ClientDto>(entites.Count);
+        foreach (var entity in entites)
+        {
+            var item = _mapper.Map<Client, ClientDto>(entity);
+            if (entity is null)
+            {
+                throw new AutoMapperMappingException("Mapping exception.", null, new TypePair(typeof(Client), typeof(ClientDto)));
+            }
+        }
+        return result;
     }
-
-    public Task<IReadOnlyCollection<ClientDto>> GetAll(CancellationToken stoppingToken = default)
+    public async Task Update(UpdateClientRequest request, CancellationToken stoppingToken = default)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task Update(UpdateClientRequest request, CancellationToken stoppingToken = default)
-    {
-        throw new NotImplementedException();
+        ArgumentNullException.ThrowIfNull(request, nameof(request));
+        var entity = _mapper.Map<UpdateClientRequest, Client>(request);
+        if (entity is null)
+        {
+            throw new AutoMapperMappingException("Mapping exception.", null, new TypePair(typeof(ClientDto), typeof(Client)));
+        }
+        await _clientRepository.Update(entity, stoppingToken);
     }
 }
