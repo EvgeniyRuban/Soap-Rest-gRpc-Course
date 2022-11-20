@@ -8,11 +8,11 @@ using ClinicService.Domain.Repos;
 namespace ClinicService.Domain.Services;
 
 public abstract class CrudServiceBase<TEntity, TId> : ICrudService<ICreateRequest<TEntity, TId>,
-                                                                   IGetResponse<TEntity, TId>,
+                                                                   IEntityResponse<TEntity, TId>,
                                                                    IUpdateRequest<TEntity, TId>,
                                                                    TEntity,
                                                                    TId>
-    where TEntity : IEntity<TId>
+    where TEntity : IEntity<TId>, new()
 {
     protected readonly ICrudRepository<TEntity, TId> Repository;
     protected readonly IMapper Mapper;
@@ -46,31 +46,31 @@ public abstract class CrudServiceBase<TEntity, TId> : ICrudService<ICreateReques
     public virtual async Task Delete(TId id, CancellationToken stoppingToken = default)
         => await Repository.Delete(id, stoppingToken);
 
-    public virtual async Task<IGetResponse<TEntity, TId>> Get(TId id, CancellationToken stoppingToken = default)
+    public virtual async Task<IEntityResponse<TEntity, TId>> Get(TId id, CancellationToken stoppingToken = default)
     {
         var entity = await Repository.Get(id, stoppingToken);
         if (entity is null)
         {
             throw new EntityNotFoundException();
         }
-        var result = Mapper.Map<TEntity, IGetResponse<TEntity, TId>>(entity);
+        var result = Mapper.Map<TEntity, IEntityResponse<TEntity, TId>>(entity);
         if (result is null)
         {
-            throw new AutoMapperMappingException("Mapping exception", null, new TypePair(typeof(TEntity), typeof(IGetResponse<TEntity, TId>)));
+            throw new AutoMapperMappingException("Mapping exception", null, new TypePair(typeof(TEntity), typeof(IEntityResponse<TEntity, TId>)));
         }
         return result;
     }
 
-    public virtual async Task<IReadOnlyCollection<IGetResponse<TEntity, TId>>> GetAll(CancellationToken stoppingToken = default)
+    public virtual async Task<IReadOnlyCollection<IEntityResponse<TEntity, TId>>> GetAll(CancellationToken stoppingToken = default)
     {
-        var result = new List<IGetResponse<TEntity, TId>>();
+        var result = new List<IEntityResponse<TEntity, TId>>();
         var clients = await Repository.GetAll(stoppingToken);
         foreach (var item in clients)
         {
-            var client = Mapper.Map<TEntity, IGetResponse<TEntity, TId>>(item);
+            var client = Mapper.Map<TEntity, IEntityResponse<TEntity, TId>>(item);
             if (result is null)
             {
-                throw new AutoMapperMappingException("Mapping exception", null, new TypePair(typeof(TEntity), typeof(IGetResponse<TEntity, TId>)));
+                throw new AutoMapperMappingException("Mapping exception", null, new TypePair(typeof(TEntity), typeof(IEntityResponse<TEntity, TId>)));
             }
             result.Add(client);
         }

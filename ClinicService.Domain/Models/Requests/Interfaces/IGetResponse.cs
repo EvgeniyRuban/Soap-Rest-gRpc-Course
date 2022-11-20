@@ -2,6 +2,8 @@
 
 namespace ClinicService.Domain.Models;
 
-public interface IGetResponse<TEntity, TId> where TEntity : IEntity<TId>
+public interface IGetResponse<TEntity, TId> : IResponse
+    where TEntity : IEntity<TId>, new()
 {
+    IEntityResponse<TEntity, TId> Entity { get; set; }
 }

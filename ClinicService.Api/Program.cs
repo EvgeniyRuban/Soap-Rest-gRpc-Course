@@ -5,7 +5,6 @@ using ClinicService.Domain.Repos;
 using ClinicService.Domain.Services;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using System.Net;
 
 namespace ClinicService.Api;

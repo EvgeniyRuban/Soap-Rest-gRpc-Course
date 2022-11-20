@@ -2,6 +2,7 @@
 
 namespace ClinicService.Domain.Models;
 
-public interface IUpdateResponse<TEntity, TId> where TEntity : IEntity<TId>
+public interface IUpdateResponse<TEntity, TId> : IResponse
+    where TEntity : IEntity<TId>
 {
 }

@@ -2,6 +2,7 @@
 
 namespace ClinicService.Domain.Models;
 
-public interface IDeleteResponse<TEntity, TId> where TEntity : IEntity<TId>
+public interface IDeleteResponse<TEntity, TId> : IResponse
+    where TEntity : IEntity<TId>
 {
 }

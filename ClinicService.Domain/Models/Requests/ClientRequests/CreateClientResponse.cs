@@ -1,6 +1,8 @@
-﻿namespace ClinicService.Domain.Models;
+﻿using ClinicService.Domain.Entities;
 
-public class CreateClientResponse
+namespace ClinicService.Domain.Models;
+
+public class CreateClientResponse : ICreateResponse<Client, int>, IResponse
 {
     public int Id { get; set; }
     public int ErrorCode { get; set; }

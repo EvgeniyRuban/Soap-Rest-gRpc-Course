@@ -2,6 +2,8 @@
 
 namespace ClinicService.Domain.Models;
 
-public interface IGetAllResponse<TEntity, TId> where TEntity : IEntity<TId>
+public interface IGetAllResponse<TEntity, TId> : IResponse
+    where TEntity : IEntity<TId>, new()
 {
+    IReadOnlyCollection<IEntityResponse<TEntity, TId>> Entities { get; set; }
 }

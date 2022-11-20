@@ -2,7 +2,7 @@
 
 namespace ClinicService.Domain.Models;
 
-public class ClientResponse : IGetResponse<Client, int>
+public class ClientResponse : IEntityResponse<Client, int>
 {
     public int Id { get; set; }
     public string FirstName { get; set; } = null!;
