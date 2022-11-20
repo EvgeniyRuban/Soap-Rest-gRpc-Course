@@ -7,12 +7,12 @@ using static ClinicServiceNamespace.ClientService;
 
 namespace ClinicService.Api.Services;
 
-public class ClientService : ClientServiceBase
+public class ClientServiceV1 : ClientServiceBase
 {
     private readonly IClientRepository _clientRepository;
 
 
-    public ClientService(IClientRepository clientRepository)
+    public ClientServiceV1(IClientRepository clientRepository)
     {
         _clientRepository = clientRepository;
     }

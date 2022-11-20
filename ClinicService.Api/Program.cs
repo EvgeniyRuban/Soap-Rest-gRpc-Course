@@ -1,9 +1,11 @@
 using AutoMapper;
 using ClinicService.Api.Services;
+using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
 using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
+using ClinicService.Domain.Services;
 using Google.Api;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -65,21 +67,14 @@ public class Program
 
         #region Configure Swagger
 
-        builder.Services.AddGrpcSwagger();
-        builder.Services.AddSwaggerGen(c =>
-        {
-            c.SwaggerDoc("v1",
-                new OpenApiInfo { Title = "ClinicService", Version = "v1" });
-            var filePath = Path.Combine(System.AppContext.BaseDirectory, "ClinicService.Api.xml");
-            c.IncludeXmlComments(filePath);
-            c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
-        });
+        builder.Services.AddSwaggerGen();
 
         #endregion
 
         #region Registering service dependencies
 
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IClientService, ClientService>();
 
         #endregion
 
@@ -97,10 +92,6 @@ public class Program
         app.MapControllers();
 
         app.UseRouting();
-
-        app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
-
-        app.MapGrpcService<ClientService>().EnableGrpcWeb();
 
         app.Run();
     }

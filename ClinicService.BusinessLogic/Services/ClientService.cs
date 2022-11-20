@@ -56,10 +56,11 @@ public sealed class ClientService : IClientService
         foreach (var entity in entites)
         {
             var item = _mapper.Map<Client, ClientDto>(entity);
-            if (entity is null)
+            if (item is null)
             {
                 throw new AutoMapperMappingException("Mapping exception.", null, new TypePair(typeof(Client), typeof(ClientDto)));
             }
+            result.Add(item);
         }
         return result;
     }

@@ -14,7 +14,7 @@ public sealed class MappingProfile : Profile
     public void CreateClientMapping()
     {
         CreateMap<CreateClientRequest, Client>();
-        CreateMap<UpdateClientRequest, Client>();
+        CreateMap<UpdateClientRequest, Client>().ForMember(dest => dest.Id, c => c.MapFrom(src => src.ClientToUpdateId));
         CreateMap<Client, ClientDto>();
     }
 }
