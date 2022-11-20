@@ -1,6 +1,7 @@
 ﻿using ClinicService.Domain.Entities;
 using ClinicService.Domain.Exceptions;
 using ClinicService.Domain.Repos;
+using ClinicService.Domain.Repos.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClinicService.DAL.Repos;
@@ -51,5 +52,33 @@ public class ClientRepository : IClientRepository
         entityToUpdate.Patronymic = entity.Patronymic;
         entityToUpdate.Document = entity.Document;
         await _dbContext.SaveChangesAsync(stoppingToken);
+    }
+}
+
+public class AccountRespository : IAccountRepository
+{
+    public Task<int> Add(Account entity, CancellationToken stoppingToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Delete(int id, CancellationToken stoppingToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Account?> Get(int id, CancellationToken stoppingToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IReadOnlyCollection<Account>> GetAll(CancellationToken stoppingToken = default)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task Update(Account entity, CancellationToken stoppingToken = default)
+    {
+        throw new NotImplementedException();
     }
 }

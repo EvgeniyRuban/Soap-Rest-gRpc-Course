@@ -12,6 +12,8 @@ public class ClinicServiceDbContext : DbContext
 	public DbSet<Client> Clients { get; set; } = null!;
 	public DbSet<Pet> Pets { get; set; } = null!;
     public DbSet<Consultation> Consultations { get; set; } = null!;
+	public DbSet<Account> Accounts { get; set; } = null!;
+	public DbSet<AccountSession> AccountSessions { get; set; } = null!;
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder)
 	{
