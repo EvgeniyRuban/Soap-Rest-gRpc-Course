@@ -32,3 +32,4 @@ public class Account : IEntity
 
     [InverseProperty(nameof(AccountSession.Account))]
     public virtual ICollection<AccountSession> Sessions { get; set; } = new HashSet<AccountSession>();
+}

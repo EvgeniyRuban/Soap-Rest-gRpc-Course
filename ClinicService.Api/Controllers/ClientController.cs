@@ -29,9 +29,21 @@ public class ClientController : ControllerBase
                 Client = await _clientService.Get(id, stoppingToken)
             });
         }
-        catch (Exception ex)
+        catch(EntityNotFoundException ex)
         {
-            var exceptionTemplate = new ServerSideException();
+            return Ok(new GetClientResponse
+            {
+                ErrorCode= ex.ErrorCode,
+                ErrorMessage = ex.Message
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            return Ok(new GetClientResponse());
+        }
+        catch (Exception)
+        {
+            var exceptionTemplate = new EntityReceivingException();
             return Ok(new GetClientResponse
             {
                 ErrorCode = exceptionTemplate.ErrorCode,
@@ -50,9 +62,13 @@ public class ClientController : ControllerBase
                 Clients = await _clientService.GetAll(stoppingToken)
             });
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
-            var exceptionTemplate = new ServerSideException();
+            return Ok(new GetClientsResponse());
+        }
+        catch (Exception)
+        {
+            var exceptionTemplate = new EntityReceivingException();
             return Ok(new GetClientsResponse
             {
                 ErrorCode = exceptionTemplate.ErrorCode,
@@ -71,9 +87,13 @@ public class ClientController : ControllerBase
                 Id = await _clientService.Add(request, stoppingToken)
             });
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
-            var exceptionTemplate = new ServerSideException();
+            return Ok(new CreateClientResponse());
+        }
+        catch (Exception)
+        {
+            var exceptionTemplate = new EntityAdditionException();
             return Ok(new CreateClientResponse
             {
                 ErrorCode = exceptionTemplate.ErrorCode,
@@ -90,9 +110,21 @@ public class ClientController : ControllerBase
             await _clientService.Update(request, stoppingToken);
             return Ok(new UpdateClientResponse());
         }
-        catch (Exception ex)
+        catch (OperationCanceledException)
         {
-            var exceptionTemplate = new ServerSideException();
+            return Ok(new UpdateClientResponse());
+        }
+        catch(EntityNotFoundException ex)
+        {
+            return Ok(new UpdateClientResponse
+            {
+                ErrorCode = ex.ErrorCode,
+                ErrorMessage = ex.Message
+            });
+        }
+        catch (Exception)
+        {
+            var exceptionTemplate = new EntityUpdatingException();
             return Ok(new UpdateClientResponse
             {
                 ErrorCode = exceptionTemplate.ErrorCode,
@@ -109,7 +141,19 @@ public class ClientController : ControllerBase
             await _clientService.Delete(id, stoppingToken);
             return Ok(new DeleteClientResponse());
         }
-        catch (Exception ex)
+        catch(EntityNotFoundException ex)
+        {
+            return Ok(new DeleteClientResponse
+            {
+                ErrorCode = ex.ErrorCode,
+                ErrorMessage = ex.Message
+            });
+        }
+        catch (OperationCanceledException)
+        {
+            return Ok(new DeleteClientResponse());
+        }
+        catch (Exception)
         {
             var exceptionTemplate = new ServerSideException();
             return Ok(new DeleteClientResponse

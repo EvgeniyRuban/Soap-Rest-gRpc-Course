@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClinicService.DAL.Repos;
 
-public class AccountRespository : IAccountRepository
+public class AccountRepository : IAccountRepository
 {
     private readonly ClinicServiceDbContext _dbContext;
 
 
-    public AccountRespository(ClinicServiceDbContext dbContext)
+    public AccountRepository(ClinicServiceDbContext dbContext)
     {
         ArgumentNullException.ThrowIfNull(dbContext, nameof(dbContext));
         _dbContext = dbContext;

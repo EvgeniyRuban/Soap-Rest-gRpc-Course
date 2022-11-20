@@ -5,6 +5,7 @@ using ClinicService.DAL;
 using ClinicService.DAL.Repos;
 using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
+using ClinicService.Domain.Repos.Interfaces;
 using ClinicService.Domain.Services;
 using Google.Api;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -75,6 +76,8 @@ public class Program
 
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
         builder.Services.AddScoped<IClientService, ClientService>();
+        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        builder.Services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
 
         #endregion
 
