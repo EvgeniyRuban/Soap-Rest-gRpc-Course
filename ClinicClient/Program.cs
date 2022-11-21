@@ -21,7 +21,7 @@ namespace ClinicClient
                 Password = "test",
             });
 
-            if(authResponse.Status != 0)
+            if (authResponse.Status != 0)
             {
                 Console.WriteLine("Authentication error.");
                 Console.ReadKey();
@@ -77,10 +77,7 @@ namespace ClinicClient
             }
             else
             {
-                Console.WriteLine($"Get clients error.\nErrorCode: {getClientResponse.ErrCode}\nErrorMessage: {getClientResponse.ErrMessage}");
             }
-
-            Console.ReadKey();
         }
     }
 }
