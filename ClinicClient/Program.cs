@@ -1,7 +1,6 @@
 ﻿using ClinicServiceProtos;
 using Grpc.Core;
 using Grpc.Net.Client;
-using System.Runtime.CompilerServices;
 using static ClinicServiceProtos.AuthenticationService;
 using static ClinicServiceProtos.ClientService;
 
