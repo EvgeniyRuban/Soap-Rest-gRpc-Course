@@ -35,6 +35,14 @@ public class AccountSessionRepository : IAccountSessionRepository
     }
     public async Task<AccountSession?> Get(int id, CancellationToken stoppingToken = default)
         => await _dbContext.AccountSessions.FirstOrDefaultAsync(a => a.Id == id, stoppingToken);
+    public async Task<AccountSession?> Get(string sessionToken, CancellationToken stoppingToken = default)
+    {
+        if (string.IsNullOrWhiteSpace(sessionToken))
+        {
+            throw new ArgumentException(sessionToken, nameof(sessionToken));
+        }
+        return await _dbContext.AccountSessions.FirstOrDefaultAsync(a => a.SessionToken == sessionToken, stoppingToken);
+    }
     public async Task<IReadOnlyCollection<AccountSession>> GetAll(CancellationToken stoppingToken = default)
         => await _dbContext.AccountSessions.ToListAsync(stoppingToken);
     public async Task Update(AccountSession entity, CancellationToken stoppingToken = default)

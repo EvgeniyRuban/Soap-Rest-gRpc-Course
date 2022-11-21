@@ -16,6 +16,7 @@ namespace ClinicService.BusinessLogic.Services;
 public class AuthenticationService : IAuthenticationService
 {
     public const string SecretKey = "kYp3s6v9y/B?E(H+";
+
     private readonly IServiceScopeFactory _serviceScopeFactory;
     private readonly ConcurrentDictionary<string, SessionContext> _sessions = new();
 
@@ -26,6 +27,40 @@ public class AuthenticationService : IAuthenticationService
     }
 
 
+    public async Task<SessionContext?> GetSession(string sessionToken, CancellationToken stoppingToken = default)
+    {
+        using IServiceScope scope = _serviceScopeFactory.CreateScope();
+        var accountSessionRepository = scope.ServiceProvider.GetRequiredService<IAccountSessionRepository>();
+
+        if (_sessions.TryGetValue(sessionToken, out var sessionContext))
+        {
+            return sessionContext;
+        }
+
+        var accountSession = await accountSessionRepository.Get(sessionToken, stoppingToken);
+
+        if (accountSession is null)
+        {
+            return null;
+        }
+
+        var newSessionContext = new SessionContext
+        {
+            SessionId = accountSession.Id,
+            SessionToken = accountSession.SessionToken,
+            Account = new AccountDto
+            {
+                Id = accountSession.AccountId,
+                Email = accountSession.Account.Email,
+                FirstName = accountSession.Account.FirstName,
+                Surname = accountSession.Account.Surname,
+                Patronymic = accountSession.Account.Patronymic
+            }
+        };
+
+        _sessions.TryAdd(sessionToken, newSessionContext);
+        return newSessionContext;
+    }
     public async Task<AuthenticationResponse> Login(AuthenticationRequest request, CancellationToken stoppingToken = default)
     {
         var dateTimeNow = DateTime.Now;
@@ -35,7 +70,8 @@ public class AuthenticationService : IAuthenticationService
 
         var account =
             !string.IsNullOrWhiteSpace(request.Login) && !string.IsNullOrWhiteSpace(request.Password)
-            ? await accountRepository.Get(request.Login, stoppingToken) : null;
+            ? await accountRepository.Get(request.Login, stoppingToken)
+            : null;
 
         if (account == null ||
             !PasswordUtils.Verify(request.Password, account.PasswordHash, account.PasswordSalt))
@@ -72,13 +108,12 @@ public class AuthenticationService : IAuthenticationService
             }
         };
 
-
-        while (!_sessions.TryAdd(sessionContext.SessionToken, sessionContext)) ;
+        _sessions.TryAdd(sessionContext.SessionToken, sessionContext);
 
         return new AuthenticationResponse
         {
             Status = AuthenticationStatus.Success,
-            SessionContext = _sessions[session.SessionToken]
+            SessionContext = sessionContext
         };
     }
     private string CreateSessionToken(Account account)
