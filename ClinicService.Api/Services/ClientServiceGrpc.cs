@@ -8,8 +8,7 @@ using static ClinicServiceProtos.ClientService;
 
 namespace ClinicService.Api.Services;
 
-[Authorize]
-public class ClientServiceGrpc : ClientServiceBase
+public class ClientServiceV1 : ClientServiceBase
 {
     private readonly IClientRepository _clientRepository;
 

@@ -76,11 +76,7 @@ namespace ClinicClient
                 }
             }
             else
-            {
-                Console.WriteLine($"Get clients error.\nErrorCode: {getClientResponse.ErrCode}\nErrorMessage: {getClientResponse.ErrMessage}");
-            }
-
-            Console.ReadKey();
+        {
         }
     }
 }
