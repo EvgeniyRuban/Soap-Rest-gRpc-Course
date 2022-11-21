@@ -3,6 +3,7 @@
 public enum ErrorCode
 {
     ServerSideError = 1000,
+    InvalidRegistrationData = 1001,
     EntityNotFoundError = 1101,
     EntityReceivingError = 1100,
     EntityAdditionError = 1200,

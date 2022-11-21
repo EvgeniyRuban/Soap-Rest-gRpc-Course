@@ -1,5 +1,6 @@
 ﻿using ClinicService.Domain.Models;
 using ClinicService.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using System.Net.Http.Headers;
@@ -8,12 +9,12 @@ namespace ClinicService.Api.Controllers;
 
 [Route("auth")]
 [ApiController]
-public class AuthenticationControllercs : ControllerBase
+public class AuthenticationController : ControllerBase
 {
     private readonly IAuthenticationService _authService;
 
 
-    public AuthenticationControllercs(IAuthenticationService authService)
+    public AuthenticationController(IAuthenticationService authService)
     {
         ArgumentNullException.ThrowIfNull(authService, nameof(authService));
         _authService = authService;

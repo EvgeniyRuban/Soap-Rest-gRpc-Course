@@ -5,9 +5,13 @@ using ClinicService.DAL.Repos;
 using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
 using ClinicService.Domain.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Net;
+using System.Text;
 
 namespace ClinicService.Api;
 
@@ -64,7 +68,59 @@ public class Program
 
         #region Configure Swagger
 
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = typeof(Program).Assembly.GetName().Name,
+                Version = "v1"
+            });
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Autorization header using the Bearer scheme (Example: 'Bearer 12345abcde')",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>() 
+                }
+            });
+        });
+
+        #endregion
+
+        #region Configure JWT
+
+        builder.Services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationService.SecretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
 
         #endregion
 
@@ -73,8 +129,9 @@ public class Program
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
         builder.Services.AddScoped<IClientService, ClientService>();
         builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        builder.Services.AddScoped<IAccountService, AccountService>();
         builder.Services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
-        builder.Services.AddSingleton<Domain.Services.IAuthenticationService, BusinessLogic.Services.AuthenticationService>();
+        builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
         #endregion
 
@@ -92,6 +149,10 @@ public class Program
         app.MapControllers();
 
         app.UseRouting();
+
+        app.UseAuthentication();
+
+        app.UseAuthorization();
 
         app.Run();
     }

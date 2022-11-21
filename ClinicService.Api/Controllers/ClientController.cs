@@ -1,10 +1,12 @@
 ﻿using ClinicService.Domain.Exceptions;
 using ClinicService.Domain.Models;
 using ClinicService.Domain.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClinicService.Api.Controllers;
 
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class ClientController : ControllerBase

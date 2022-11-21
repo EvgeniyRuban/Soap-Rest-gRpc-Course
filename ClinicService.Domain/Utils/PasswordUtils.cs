@@ -17,10 +17,10 @@ public static class PasswordUtils
         string passwordSalt = Convert.ToBase64String(buffer);
         string passwordHash = GetPasswordHash(password, passwordSalt);
 
-        return (passwordSalt, passwordHash);
+        return (passwordHash, passwordSalt);
     }
     public static bool Verify(string password, string passwordHash, string passwordSalt)
-        => GetPasswordHash(password, passwordHash) == passwordSalt;
+        => GetPasswordHash(password, passwordSalt) == passwordHash;
     private static string GetPasswordHash(string password, string passwordSalt)
     {
         password = $"{password}~{passwordSalt}~{_secretKey}";
@@ -28,7 +28,7 @@ public static class PasswordUtils
 
         using var sha512 = new SHA512Managed();
         byte[] passwordHash = sha512.ComputeHash(buffer);
-
+  
         return Convert.ToBase64String(passwordHash);
     }
 }

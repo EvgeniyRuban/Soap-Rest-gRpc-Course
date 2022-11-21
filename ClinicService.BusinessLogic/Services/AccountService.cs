@@ -1,4 +1,5 @@
 ﻿using ClinicService.Domain.Entities;
+using ClinicService.Domain.Exceptions;
 using ClinicService.Domain.Models;
 using ClinicService.Domain.Repos;
 using ClinicService.Domain.Services;
@@ -24,7 +25,7 @@ public class AccountService : IAccountService
         if (string.IsNullOrWhiteSpace(request.Email)
             || string.IsNullOrWhiteSpace(request.Password))
         {
-            throw new InvalidDataException();
+            throw new InvalidRegistrationDataException();
         }
 
         var tuglePassword = PasswordUtils.CreatePasswordHash(request.Password);
@@ -32,7 +33,7 @@ public class AccountService : IAccountService
         {
             Email = request.Email,
             PasswordHash = tuglePassword.passwordHash,
-            PasswordSalt = tuglePassword.passwordHash,
+            PasswordSalt = tuglePassword.passwordSalt,
             FirstName = request.FirstName,
             Surname = request.Surname,
             Patronymic = request.Patronymic,
