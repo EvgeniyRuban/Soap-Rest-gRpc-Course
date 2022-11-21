@@ -1,18 +1,20 @@
 ﻿using ClinicService.Domain.Entities;
 using ClinicService.Domain.Exceptions;
 using ClinicService.Domain.Repos;
-using ClinicServiceNamespace;
+using ClinicServiceProtos;
 using Grpc.Core;
-using static ClinicServiceNamespace.ClientService;
+using Microsoft.AspNetCore.Authorization;
+using static ClinicServiceProtos.ClientService;
 
 namespace ClinicService.Api.Services;
 
-public class ClientServiceV1 : ClientServiceBase
+[Authorize]
+public class ClientServiceGrpc : ClientServiceBase
 {
     private readonly IClientRepository _clientRepository;
 
 
-    public ClientServiceV1(IClientRepository clientRepository)
+    public ClientServiceGrpc(IClientRepository clientRepository)
     {
         _clientRepository = clientRepository;
     }

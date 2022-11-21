@@ -1,4 +1,5 @@
 using AutoMapper;
+using ClinicService.Api.Services;
 using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
@@ -52,6 +53,8 @@ public class Program
             options.Listen(IPAddress.Any, 5102, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
+                listenOptions.UseHttps(builder.Configuration["SecurityCertificateSettings:Path"],
+                                       builder.Configuration["SecurityCertificateSettings:Password"]);
             });
         });
 
@@ -153,6 +156,9 @@ public class Program
         app.UseAuthentication();
 
         app.UseAuthorization();
+
+        app.MapGrpcService<ClientServiceGrpc>().EnableGrpcWeb();
+        app.MapGrpcService<AuthenticationServiceGrpc>().EnableGrpcWeb();
 
         app.Run();
     }
