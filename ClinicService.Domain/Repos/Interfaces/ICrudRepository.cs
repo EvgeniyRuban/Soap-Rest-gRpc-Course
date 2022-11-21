@@ -30,10 +30,10 @@ public interface ICrudRepository<TEntity, TId> : IRepository<TEntity, TId> where
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="EntityNotFoundException"></exception>
     /// <exception cref="OperationCanceledException"></exception>
-    Task Update(TEntity entity, CancellationToken stoppingToken= default);
+    Task Update(TEntity entity, CancellationToken stoppingToken = default);
 
     /// <summary>
-    /// Delete entity by <paramref name="id"/>.
+    /// Delete <typeparamref name="TEntity"/> entity by <paramref name="id"/>.
     /// </summary>
     /// <exception cref="EntityNotFoundException"></exception>
     /// <exception cref="OperationCanceledException"></exception>

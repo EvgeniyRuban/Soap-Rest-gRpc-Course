@@ -1,46 +1,19 @@
 syntax = "proto3";
 
-option csharp_namespace = "ClinicServiceNamespace";
+option csharp_namespace = "ClinicServiceProtos";
 
 // https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/wrappers.proto
 
 import "google/protobuf/wrappers.proto";
-import "google/api/annotations.proto";
 
 package proto;
 
-// Clients service
 service ClientService{
-	// Add client
-	rpc Add (CreateClientRequest) returns (CreateClientResponse){
-		option (google.api.http) = {
-			post: "/clients"
-		};
-	}
-	// Get client by id
-	rpc Get (GetClientRequest) returns (GetClientResponse){
-		option (google.api.http) = {
-			get: "/clients/{id}"
-		};
-	}
-	// Get clients
-	rpc GetAll (GetClientsRequest) returns (GetClientsResponse){
-		option (google.api.http) = {
-			get: "/clients"
-		};
-	}
-	// Update client
-	rpc Update (UpdateClientRequest) returns (UpdateClientResponse){
-		option (google.api.http) = {
-			put: "/clients"
-		};
-	}
-	// Delete client by id
-	rpc Delete (DeleteClientRequest) returns (DeleteClientResponse){
-		option (google.api.http) = {
-			delete: "/clients/{id}"
-		};
-	}
+	rpc Add (CreateClientRequest) returns (CreateClientResponse);
+	rpc Get (GetClientRequest) returns (GetClientResponse);
+	rpc GetAll (GetClientsRequest) returns (GetClientsResponse);
+	rpc Update (UpdateClientRequest) returns (UpdateClientResponse);
+	rpc Delete (DeleteClientRequest) returns (DeleteClientResponse);
 }
 
 message ClientResponse{

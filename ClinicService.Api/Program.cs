@@ -1,11 +1,18 @@
+using AutoMapper;
 using ClinicService.Api.Services;
+using ClinicService.BusinessLogic.Services;
 using ClinicService.DAL;
 using ClinicService.DAL.Repos;
+using ClinicService.Domain.Mappers;
 using ClinicService.Domain.Repos;
+using ClinicService.Domain.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using System.Text;
 
 namespace ClinicService.Api;
 
@@ -14,6 +21,14 @@ public class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+
+        #region Configure AutoMapper
+
+        var mapperConfigurations = new MapperConfiguration(mp => mp.AddProfile<MappingProfile>());
+        var mapper = mapperConfigurations.CreateMapper();
+        builder.Services.AddSingleton(mapper);
+
+        #endregion
 
         #region Configure Grpc
 
@@ -38,6 +53,8 @@ public class Program
             options.Listen(IPAddress.Any, 5102, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
+                listenOptions.UseHttps(builder.Configuration["SecurityCertificateSettings:Path"],
+                                       builder.Configuration["SecurityCertificateSettings:Password"]);
             });
         });
 
@@ -54,14 +71,58 @@ public class Program
 
         #region Configure Swagger
 
-        builder.Services.AddGrpcSwagger();
-        builder.Services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(options =>
         {
-            c.SwaggerDoc("v1",
-                new OpenApiInfo { Title = "ClinicService", Version = "v1" });
-            var filePath = Path.Combine(System.AppContext.BaseDirectory, "ClinicService.Api.xml");
-            c.IncludeXmlComments(filePath);
-            c.IncludeGrpcXmlComments(filePath, includeControllerXmlComments: true);
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Title = typeof(Program).Assembly.GetName().Name,
+                Version = "v1"
+            });
+            options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Autorization header using the Bearer scheme (Example: 'Bearer 12345abcde')",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer"
+            });
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = "Bearer"
+                        }
+                    },
+                    Array.Empty<string>() 
+                }
+            });
+        });
+
+        #endregion
+
+        #region Configure JWT
+
+        builder.Services.AddAuthentication(x =>
+        {
+            x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(x =>
+        {
+            x.RequireHttpsMetadata = false;
+            x.SaveToken = true;
+            x.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AuthenticationService.SecretKey)),
+                ValidateIssuer = false,
+                ValidateAudience = false,
+                ClockSkew = TimeSpan.Zero
+            };
         });
 
         #endregion
@@ -69,6 +130,11 @@ public class Program
         #region Registering service dependencies
 
         builder.Services.AddScoped<IClientRepository, ClientRepository>();
+        builder.Services.AddScoped<IClientService, ClientService>();
+        builder.Services.AddScoped<IAccountRepository, AccountRepository>();
+        builder.Services.AddScoped<IAccountService, AccountService>();
+        builder.Services.AddScoped<IAccountSessionRepository, AccountSessionRepository>();
+        builder.Services.AddSingleton<IAuthenticationService, AuthenticationService>();
 
         #endregion
 
@@ -87,9 +153,12 @@ public class Program
 
         app.UseRouting();
 
-        app.UseGrpcWeb(new GrpcWebOptions { DefaultEnabled = true });
+        app.UseAuthentication();
 
-        app.MapGrpcService<ClientService>().EnableGrpcWeb();
+        app.UseAuthorization();
+
+        app.MapGrpcService<ClientServiceGrpc>().EnableGrpcWeb();
+        app.MapGrpcService<AuthenticationServiceGrpc>().EnableGrpcWeb();
 
         app.Run();
     }

@@ -17,11 +17,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Protos\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\ClinicService.Api\Protos\client.proto">
+    <Protobuf Include="..\ClinicService.Api\Protos\auth.proto" GrpcServices="Client">
+      <Link>Protos\auth.proto</Link>
+    </Protobuf>
+    <Protobuf Include="..\ClinicService.Api\Protos\client.proto" GrpcServices="Client">
       <Link>Protos\client.proto</Link>
     </Protobuf>
   </ItemGroup>
