@@ -26,41 +26,41 @@ public class AccountRepository : IAccountRepository
     }
     public async Task Delete(int id, CancellationToken stoppingToken = default)
     {
-        var entity = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == id, stoppingToken);
-        if(entity is null)
+        var entity = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == id && !a.Locked, stoppingToken);
+        if (entity is null)
         {
             throw new EntityNotFoundException();
         }
         _dbContext.Accounts.Remove(entity);
         await _dbContext.SaveChangesAsync(stoppingToken);
     }
-    public async Task<Account?> Get(int id, CancellationToken stoppingToken = default) 
-        => await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == id, stoppingToken);
+    public async Task<Account?> Get(int id, CancellationToken stoppingToken = default)
+        => await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == id && !a.Locked, stoppingToken);
     public async Task<Account?> Get(string login, CancellationToken stoppingToken = default)
     {
         if (string.IsNullOrWhiteSpace(login))
         {
             throw new ArgumentException(login, nameof(login));
         }
-        return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == login);
+        return await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Email == login && !a.Locked, stoppingToken);
     }
-    public async Task<IReadOnlyCollection<Account>> GetAll(CancellationToken stoppingToken = default) 
-        => await _dbContext.Accounts.ToListAsync(stoppingToken);
+    public async Task<IReadOnlyCollection<Account>> GetAll(CancellationToken stoppingToken = default)
+        => await _dbContext.Accounts.Where(a => !a.Locked).ToListAsync(stoppingToken);
     public async Task Update(Account entity, CancellationToken stoppingToken = default)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));
-        var entityToUpdate = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == entity.Id, stoppingToken);
-        if(entityToUpdate is null)
+        var entityToUpdate = await _dbContext.Accounts.FirstOrDefaultAsync(a => a.Id == entity.Id && !a.Locked, stoppingToken);
+        if (entityToUpdate is null)
         {
             throw new EntityNotFoundException();
         }
         entityToUpdate.Email = entity.Email;
         entityToUpdate.FirstName = entity.FirstName;
         entityToUpdate.Surname = entity.Surname;
-        entityToUpdate.Patronymic= entity.Patronymic;
-        entityToUpdate.PasswordHash= entity.PasswordHash;
-        entityToUpdate.PasswordSalt= entity.PasswordSalt;
-        entityToUpdate.Locked= entity.Locked;
+        entityToUpdate.Patronymic = entity.Patronymic;
+        entityToUpdate.PasswordHash = entity.PasswordHash;
+        entityToUpdate.PasswordSalt = entity.PasswordSalt;
+        entityToUpdate.Locked = entity.Locked;
         await _dbContext.SaveChangesAsync(stoppingToken);
     }
 }
