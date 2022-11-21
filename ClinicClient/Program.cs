@@ -1,3 +1,12 @@
+﻿<<<<<<<<< Temporary merge branch 1
+﻿namespace ClinicClient
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Hello, World!");
+=========
 ﻿using ClinicServiceProtos;
 using Grpc.Core;
 using Grpc.Net.Client;
