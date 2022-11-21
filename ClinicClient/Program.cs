@@ -1,4 +1,4 @@
-﻿using ClinicServiceProtos;
+﻿﻿using ClinicServiceProtos;
 using Grpc.Core;
 using Grpc.Net.Client;
 using static ClinicServiceProtos.AuthenticationService;
