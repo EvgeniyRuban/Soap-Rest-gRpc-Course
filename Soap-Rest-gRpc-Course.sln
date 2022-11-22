@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClinicService.BusinessLogic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClinicClient", "ClinicClient\ClinicClient.csproj", "{D2738676-8E0D-42C3-A7C2-11C76669A279}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "lesson(3-5)", "lesson(3-5)", "{740B65C1-4A12-48C6-B8A7-662603DC5F15}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewFolder1", "NewFolder1", "{D4049A7D-6BEF-4B25-AE78-D849C01F3A4B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,6 +46,13 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{494D78A5-CADE-4F36-A619-EC315501B207} = {740B65C1-4A12-48C6-B8A7-662603DC5F15}
+		{1C471419-B82C-4CFF-B968-8DD326F35B6F} = {740B65C1-4A12-48C6-B8A7-662603DC5F15}
+		{25D8DAAB-3BA2-448E-95F5-E8FCDBC28A70} = {740B65C1-4A12-48C6-B8A7-662603DC5F15}
+		{A7354A26-B935-4DB3-8795-7375DD40FE7D} = {740B65C1-4A12-48C6-B8A7-662603DC5F15}
+		{D2738676-8E0D-42C3-A7C2-11C76669A279} = {740B65C1-4A12-48C6-B8A7-662603DC5F15}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F70A5A93-27B5-4A6B-AB19-BADEB536A819}
